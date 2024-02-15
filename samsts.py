@@ -11,15 +11,18 @@ import time
 from IPython import display
 
 
-#Training set
-(train_images, train_labels), (_, _) = tf.keras.datasets.mnist.load_data()
-train_images = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
-train_images = (train_images - 127.5) / 127.5  # Normalize the images to [-1, 1]
-BUFFER_SIZE = 60000
-BATCH_SIZE = 256
-# Batch and shuffle the data
-train_dataset = tf.data.Dataset.from_tensor_slices(train_images).shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+dataset_path ="C:\\Users\\Sam\\PycharmProjects\\samsgan\\training_data\\"
+batch_size=3
+image_size=(571,571)
 
+train_dataset=tf.keras.preprocessing.image_dataset_from_directory(
+    dataset_path,
+    batch_size=batch_size,
+    image_size=image_size
+)
+
+# train_dataset=train_dataset.map(lambda x,y:(tf.cast(x,tf.float32)/127.5-1.0,y))
+# train_dataset=train_dataset.c
 # Create Generator
 def make_generator_model():
     model = tf.keras.Sequential()
@@ -158,7 +161,7 @@ def generate_and_save_images(model, epoch, test_input):
       plt.axis('off')
 
   plt.savefig('image_at_epoch_{:04d}.png'.format(epoch))
-  plt.show()
+  # plt.show()
 
 train(train_dataset, EPOCHS)
 checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
