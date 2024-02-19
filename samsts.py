@@ -67,3 +67,12 @@ def make_discriminator(droupoutRate=0.3):
     discriminator.add(layers.Dense(1))
 
     return discriminator
+
+# LOSS FUNCTIONS
+cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+def lossDiscriminator(realOut,fakeOut):
+    realLoss=cross_entropy(tf.ones_like(realOut),realOut)
+    fakeLoss=cross_entropy(tf.ones_like(fakeOut),fakeOut)
+    return realLoss+fakeLoss
+def lossGenerator(fakeOut):
+    return cross_entropy(tf.ones_like(fakeOut),fakeOut)
