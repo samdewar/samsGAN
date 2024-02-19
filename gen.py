@@ -1,7 +1,8 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
-
+cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+optimiser=tf.keras.optimizers.Adam(1-4)
 def make_generator(height=7, width=7,inputChannels=256):
     generator=tf.keras.Sequential()
     generator.add(layers.Dense(height*width*inputChannels,use_bias=False,input_shape=(100,)))
@@ -24,3 +25,6 @@ def make_generator(height=7, width=7,inputChannels=256):
     # assert
 
     return generator
+
+def loss(fakeOut):
+    return cross_entropy(tf.ones_like(fakeOut),fakeOut)
